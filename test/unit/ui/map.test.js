@@ -357,6 +357,20 @@ test('Map', (t) => {
             });
         });
 
+        t.test('https://github.com/mapbox/mapbox-gl-js/issues/11352', (t) => {
+            const style = createStyle();
+            let map = createMap(t, {style});
+            map.on('load', () => {
+                map.setProjection('globe');
+                t.equal(map.getProjection().name, 'globe');
+                t.ok(map.style.terrain);
+                map.remove();
+                map = createMap(t, {style});
+                t.equal(map.getProjection(), null);
+                t.equal(map.getTerrain(), null);
+            });
+        });
+
         t.test('updating terrain triggers style diffing using setTerrain operation', (t) => {
             t.test('removing terrain', (t) => {
                 const style = createStyle();
